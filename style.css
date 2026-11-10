@@ -1,0 +1,68 @@
+body { 
+    font-family: Arial, sans-serif; 
+    margin: 0; 
+    padding: 20px; 
+    background-color: #f4f4f9; 
+}
+
+header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    border-bottom: 2px solid #ddd; 
+    padding-bottom: 10px; 
+}
+
+h1 { 
+    color: #333; 
+    margin: 0; 
+}
+
+.btn-login { 
+    background: #28a745; 
+    color: white; 
+    padding: 8px 15px; 
+    text-decoration: none; 
+    border-radius: 5px; 
+}
+
+.catalog { 
+    display: flex; 
+    gap: 20px; 
+    flex-wrap: wrap; 
+    margin-top: 20px; 
+}
+
+.card { 
+    background: white; 
+    padding: 15px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+    width: 250px; 
+}
+
+.card h3 { 
+    margin-top: 0; 
+}
+
+.price { 
+    color: #007bff; 
+    font-weight: bold; 
+    font-size: 1.2em; 
+}
+
+.btn-book { 
+    background: #007bff; 
+    color: white; 
+    border: none; 
+    padding: 10px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    width: 100%; 
+    margin-top: 10px; 
+    font-size: 16px; 
+}
+
+.btn-book:hover { 
+    background: #0056b3; 
+}
