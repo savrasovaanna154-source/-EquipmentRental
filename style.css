@@ -1,68 +1,172 @@
-body { 
-    font-family: Arial, sans-serif; 
-    margin: 0; 
-    padding: 20px; 
-    background-color: #f4f4f9; 
+/* Подключаем современный шрифт */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Базовые настройки */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    border-bottom: 2px solid #ddd; 
-    padding-bottom: 10px; 
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f3f4f6; /* Мягкий серый фон */
+    color: #1f2937;
+    line-height: 1.5;
+    padding-bottom: 40px;
 }
 
-h1 { 
-    color: #333; 
-    margin: 0; 
+/* Шапка сайта */
+header {
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.btn-login { 
-    background: #28a745; 
-    color: white; 
-    padding: 8px 15px; 
-    text-decoration: none; 
-    border-radius: 5px; 
+.logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2563eb; /* Синий акцент */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
 }
 
-.catalog { 
-    display: flex; 
-    gap: 20px; 
-    flex-wrap: wrap; 
-    margin-top: 20px; 
+.btn-login {
+    background-color: #2563eb;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: background-color 0.2s;
 }
 
-.card { 
-    background: white; 
-    padding: 15px; 
-    border-radius: 8px; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-    width: 250px; 
+.btn-login:hover {
+    background-color: #1d4ed8;
 }
 
-.card h3 { 
-    margin-top: 0; 
+/* Основной контент */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
 }
 
-.price { 
-    color: #007bff; 
-    font-weight: bold; 
-    font-size: 1.2em; 
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #111827;
 }
 
-.btn-book { 
-    background: #007bff; 
-    color: white; 
-    border: none; 
-    padding: 10px; 
-    border-radius: 5px; 
-    cursor: pointer; 
-    width: 100%; 
-    margin-top: 10px; 
-    font-size: 16px; 
+/* Сетка каталога (адаптивная) */
+.catalog {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
 }
 
-.btn-book:hover { 
-    background: #0056b3; 
+/* Карточка товара */
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Заглушка вместо фото (чтобы карточки были одинаковыми) */
+.card-image {
+    height: 160px;
+    background-color: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    font-size: 0.875rem;
+}
+
+.card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.card h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #111827;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+    background-color: #dcfce7;
+    color: #166534;
+    width: fit-content;
+}
+
+.card p.category-text {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 16px;
+}
+
+.price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2563eb;
+    margin-top: auto; /* Прижимает цену и кнопку к низу */
+    margin-bottom: 16px;
+}
+
+.price span {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #6b7280;
+}
+
+/* Кнопка бронирования */
+.btn-book {
+    background-color: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    width: 100%;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-book:hover {
+    background-color: #2563eb;
+    color: white;
+    border-color: #2563eb;
 }
