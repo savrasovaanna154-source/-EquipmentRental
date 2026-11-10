@@ -4,45 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Прокат оборудования</title>
-    <!-- Подключаем внешний файл стилей -->
+    <!-- Подключаем стили -->
     <link rel="stylesheet" href="style.css">
+    <!-- Иконки для кнопок (можно использовать FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+
+    <!-- Шапка сайта -->
     <header>
-        <h1>Прокат оборудования</h1>
+        <a href="#" class="logo">
+            <i class="fa-solid fa-box-open"></i> Прокат
+        </a>
         <a href="#" class="btn-login">Войти / Регистрация</a>
     </header>
 
+    <!-- Основной контент -->
     <main>
         <h2>Каталог инвентаря</h2>
+        
         <div class="catalog">
             <!-- Карточка 1 -->
             <div class="card">
-                <h3>Палатка 4-местная</h3>
-                <p>Категория: Туризм</p>
-                <p>Состояние: Отличное</p>
-                <p class="price">500 ₽ / сутки</p>
-                <button class="btn-book" onclick="alert('Для бронирования нужно войти в систему')">Забронировать</button>
+                <div class="card-image">Фото палатки</div>
+                <div class="card-body">
+                    <span class="badge">Отличное состояние</span>
+                    <h3>Палатка 4-местная</h3>
+                    <p class="category-text">Категория: Туризм</p>
+                    <div class="price">500 ₽ <span>/ сутки</span></div>
+                    <button class="btn-book" onclick="alert('Для бронирования нужно войти в систему')">
+                        <i class="fa-solid fa-calendar-check"></i> Забронировать
+                    </button>
+                </div>
             </div>
             
             <!-- Карточка 2 -->
             <div class="card">
-                <h3>Перфоратор Bosch</h3>
-                <p>Категория: Строительство</p>
-                <p>Состояние: Хорошее</p>
-                <p class="price">800 ₽ / сутки</p>
-                <button class="btn-book" onclick="alert('Для бронирования нужно войти в систему')">Забронировать</button>
+                <div class="card-image">Фото инструмента</div>
+                <div class="card-body">
+                    <span class="badge" style="background-color: #fef3c7; color: #92400e;">Хорошее состояние</span>
+                    <h3>Перфоратор Bosch</h3>
+                    <p class="category-text">Категория: Строительство</p>
+                    <div class="price">800 ₽ <span>/ сутки</span></div>
+                    <button class="btn-book" onclick="alert('Для бронирования нужно войти в систему')">
+                        <i class="fa-solid fa-calendar-check"></i> Забронировать
+                    </button>
+                </div>
             </div>
 
             <!-- Карточка 3 -->
             <div class="card">
-                <h3>Велосипед горный</h3>
-                <p>Категория: Спорт</p>
-                <p>Состояние: Отличное</p>
-                <p class="price">600 ₽ / сутки</p>
-                <button class="btn-book" onclick="alert('Для бронирования нужно войти в систему')">Забронировать</button>
+                <div class="card-image">Фото велосипеда</div>
+                <div class="card-body">
+                    <span class="badge">Отличное состояние</span>
+                    <h3>Велосипед горный</h3>
+                    <p class="category-text">Категория: Спорт</p>
+                    <div class="price">600 ₽ <span>/ сутки</span></div>
+                    <button class="btn-book" onclick="alert('Для бронирования нужно войти в систему')">
+                        <i class="fa-solid fa-calendar-check"></i> Забронировать
+                    </button>
+                </div>
             </div>
+
+            <!-- Карточка 4 (для примера сетки) -->
+            <div class="card">
+                <div class="card-image">Фото лодки</div>
+                <div class="card-body">
+                    <span class="badge">Отличное состояние</span>
+                    <h3>Лодка надувная</h3>
+                    <p class="category-text">Категория: Водный спорт</p>
+                    <div class="price">1200 ₽ <span>/ сутки</span></div>
+                    <button class="btn-book" onclick="alert('Для бронирования нужно войти в систему')">
+                        <i class="fa-solid fa-calendar-check"></i> Забронировать
+                    </button>
+                </div>
+            </div>
+            
         </div>
     </main>
+
 </body>
 </html>
