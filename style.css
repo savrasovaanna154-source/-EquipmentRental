@@ -276,3 +276,81 @@ h2 {
     margin-top: 12px;
     display: block;
 }
+
+
+/* Стили для Личного кабинета (account.html) */
+
+.account-section {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-top: 30px;
+}
+
+.account-section h3 {
+    margin-bottom: 20px;
+    color: #111827;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Обертка для прокрутки таблицы на телефонах */
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* Стили таблицы */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+td {
+    font-size: 0.95rem;
+    color: #4b5563;
+}
+
+/* Плашки статусов */
+.status {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.status-active { background: #dcfce7; color: #166534; } 
+.status-pending { background: #fef3c7; color: #92400e; } 
+.status-overdue { background: #fee2e2; color: #991b1b; } 
+
+/* Кнопка "Детали" в таблице */
+.btn-details {
+    background: none;
+    border: none;
+    color: #2563eb;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 0;
+}
+
+.btn-details:hover {
+    text-decoration: underline;
+}
