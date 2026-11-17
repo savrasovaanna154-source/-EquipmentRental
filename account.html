@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Прокат</title>
+    <!-- Подключаем общие стили -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Иконки -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-box-open"></i> Прокат
+        </a>
+        <div>
+            <!-- Кнопка Личного кабинета (для наглядности, пока мы в нем) -->
+            <a href="account.html" class="btn-login" style="background-color: #4b5563; margin-right: 10px;">Личный кабинет</a>
+            <a href="index.html" onclick="logout()" class="btn-login">Выйти</a>
+        </div>
+    </header>
+
+    <main style="max-width: 1000px; margin: 0 auto; padding: 0 20px;">
+        <h2 style="margin-top: 30px;">Личный кабинет</h2>
+        <p id="welcomeText" style="color: #6b7280; margin-bottom: 20px;">Добро пожаловать!</p>
+
+        <div class="account-section">
+            <h3><i class="fa-solid fa-list"></i> Мои бронирования</h3>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Оборудование</th>
+                            <th>Даты аренды</th>
+                            <th>Сумма</th>
+                            <th>Статус</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsTable">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <script>
+      
+    const userName = sessionStorage.getItem('userName');
+    if (userName) {
+        document.getElementById('welcomeText').innerText = 'Добро пожаловать, ' + userName + '!';
+    }
+
+    // 2. Функция отрисовки таблицы (мы вынесли её отдельно)
+    function renderBookings() {
+        const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+        const table = document.getElementById('bookingsTable');
+
+        if (bookings.length === 0) {
+            table.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#6b7280;">У вас пока нет бронирований</td></tr>';
+            return;
+        }
+
+        // Очищаем таблицу перед новой отрисовкой
+        table.innerHTML = '';
+
+        bookings.forEach((b, index) => {
+            const start = b.startDate.split('-').reverse().join('.');
+            const end = b.endDate.split('-').reverse().join('.');
+            
+            // Определяем цвет и текст статуса
+            let statusText = 'Ожидает';
+            let statusClass = 'status-pending';
+            
+            if (b.status === 'confirmed') {
+                statusText = 'Подтверждено';
+                statusClass = 'status-active'; // Зеленый (из вашего CSS)
+            } else if (b.status === 'issued') {
+                statusText = 'Выдано';
+                statusClass = 'status-overdue'; // Желтый/Красный
+            } else if (b.status === 'returned') {
+                statusText = 'Возвращено';
+                statusClass = 'status-active';
+            }
+
+            table.innerHTML += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${b.equipment}</td>
+                    <td>${start} - ${end}</td>
+                    <td>${b.totalPrice}</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                    <td><button class="btn-details">Детали</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    renderBookings();
+
+    setInterval(renderBookings, 2000);
+
+    </script>
+</body>
+</html>
