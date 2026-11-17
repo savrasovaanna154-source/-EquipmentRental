@@ -4,19 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Прокат оборудования</title>
-    <!-- Подключаем стили -->
     <link rel="stylesheet" href="style.css">
-    <!-- Иконки для кнопок (можно использовать FontAwesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
     <!-- Шапка сайта -->
     <header>
-        <a href="#" class="logo">
+        <a href="index.html" class="logo">
             <i class="fa-solid fa-box-open"></i> Прокат
         </a>
-        <a href="login.html" class="btn-login">Войти / Регистрация</a>
+        <div>
+            <!-- Ссылки для перехода в панели (для удобства демонстрации) -->
+            <a href="admin.html" class="btn-login" style="background-color: #4b5563; margin-right: 10px;">Админ</a>
+            <a href="manager.html" class="btn-login" style="background-color: #059669; margin-right: 10px;">Менеджер</a>
+            <a href="account.html" class="btn-login" style="background-color: #d97706; margin-right: 10px;">Личный кабинет</a>
+            <a href="login.html" class="btn-login">Войти</a>
+        </div>
     </header>
 
     <!-- Основной контент -->
@@ -24,23 +28,23 @@
         <h2>Каталог инвентаря</h2>
         
         <div class="catalog">
-            <!-- Карточка 1 -->
+            <!-- Карточка 1: Палатка -->
             <div class="card">
                 <div class="card-image">
-    <img src="palatka.jpg" alt="Палатка 4-местная">
-</div>
+                    <img src="palatka.jpg" alt="Палатка 4-местная">
+                </div>
                 <div class="card-body">
                     <span class="badge">Отличное состояние</span>
                     <h3>Палатка 4-местная</h3>
                     <p class="category-text">Категория: Туризм</p>
                     <div class="price">500 ₽ <span>/ сутки</span></div>
-                    <button class="btn-book" onclick="alert('Для бронирования нужно войти в систему')">
+                    <button class="btn-book" onclick="checkAuth()" data-name="Палатка 4-местная" data-price="500">
                         <i class="fa-solid fa-calendar-check"></i> Забронировать
                     </button>
                 </div>
             </div>
             
-            <!-- Карточка 2 -->
+            <!-- Карточка 2: Перфоратор -->
             <div class="card">
                 <div class="card-image">
                     <img src="perforator.jpg" alt="Перфоратор Bosch">
@@ -50,13 +54,13 @@
                     <h3>Перфоратор Bosch</h3>
                     <p class="category-text">Категория: Строительство</p>
                     <div class="price">800 ₽ <span>/ сутки</span></div>
-                    <button class="btn-book" onclick="alert('Для бронирования нужно войти в систему')">
+                    <button class="btn-book" onclick="checkAuth()" data-name="Перфоратор Bosch" data-price="800">
                         <i class="fa-solid fa-calendar-check"></i> Забронировать
                     </button>
                 </div>
             </div>
 
-            <!-- Карточка 3 -->
+            <!-- Карточка 3: Велосипед -->
             <div class="card">
                 <div class="card-image">
                     <img src="velik.jpg" alt="Велосипед горный">
@@ -66,13 +70,13 @@
                     <h3>Велосипед горный</h3>
                     <p class="category-text">Категория: Спорт</p>
                     <div class="price">600 ₽ <span>/ сутки</span></div>
-                    <button class="btn-book" onclick="alert('Для бронирования нужно войти в систему')">
+                    <button class="btn-book" onclick="checkAuth()" data-name="Велосипед горный" data-price="600">
                         <i class="fa-solid fa-calendar-check"></i> Забронировать
                     </button>
                 </div>
             </div>
 
-            <!-- Карточка 4 (для примера сетки) -->
+            <!-- Карточка 4: Лодка -->
             <div class="card">
                 <div class="card-image">
                     <img src="lodka.jpg" alt="Лодка надувная">
@@ -82,14 +86,147 @@
                     <h3>Лодка надувная</h3>
                     <p class="category-text">Категория: Водный спорт</p>
                     <div class="price">1200 ₽ <span>/ сутки</span></div>
-                    <button class="btn-book" onclick="alert('Для бронирования нужно войти в систему')">
+                    <button class="btn-book" onclick="checkAuth()" data-name="Лодка надувная" data-price="1200">
                         <i class="fa-solid fa-calendar-check"></i> Забронировать
                     </button>
                 </div>
             </div>
-            
         </div>
     </main>
 
+    <!-- МОДАЛЬНОЕ ОКНО БРОНИРОВАНИЯ -->
+    <div id="bookingModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+            <h3 style="margin-bottom: 20px; text-align: center; color: #111827;">Бронирование</h3>
+            <p id="modalEquipmentName" style="margin-bottom: 20px; text-align: center; font-weight: 500; color: #4b5563;"></p>
+            
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Дата начала</label>
+                <input type="date" id="startDate" required style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px;">
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Дата окончания</label>
+                <input type="date" id="endDate" required style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px;">
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-top: 10px; border-top: 1px solid #e5e7eb;">
+                <span>Итого:</span>
+                <span id="modalTotalPrice" style="font-size: 1.25rem; font-weight: bold; color: #2563eb;">0 ₽</span>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button onclick="closeModal()" style="flex: 1; padding: 12px; background: #e5e7eb; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Отмена</button>
+                <button onclick="submitBooking()" style="flex: 1; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Забронировать</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- СКРИПТЫ -->
+    <script>
+        // Переменные для текущего товара
+        let currentEquipmentName = "";
+        let currentEquipmentPrice = 0;
+
+        // 1. Проверка авторизации и склада
+        function checkAuth() {
+            if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                const button = event.target;
+                const equipmentName = button.getAttribute('data-name');
+                
+                // ПРОВЕРКА СКЛАДА: есть ли свободные единицы?
+                const units = JSON.parse(localStorage.getItem('warehouse_units')) || [];
+                const availableUnits = units.filter(u => u.name === equipmentName && u.status === 'Доступно');
+
+                if (availableUnits.length === 0) {
+                    alert('К сожалению, всё оборудование "' + equipmentName + '" сейчас занято или в ремонте. Попробуйте позже.');
+                    return; // Останавливаем бронирование
+                }
+
+                // Если есть — открываем окно
+                currentEquipmentName = equipmentName;
+                currentEquipmentPrice = parseInt(button.getAttribute('data-price'));
+
+                document.getElementById('modalEquipmentName').innerText = currentEquipmentName;
+                document.getElementById('bookingModal').style.display = 'flex';
+                
+                document.getElementById('startDate').value = '';
+                document.getElementById('endDate').value = '';
+                document.getElementById('modalTotalPrice').innerText = '0 ₽';
+            } else {
+                alert('Для бронирования нужно войти в систему!');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // 2. Закрыть окно
+        function closeModal() {
+            document.getElementById('bookingModal').style.display = 'none';
+        }
+
+        // 3. Расчет стоимости
+        document.getElementById('startDate')?.addEventListener('change', calculateTotal);
+        document.getElementById('endDate')?.addEventListener('change', calculateTotal);
+
+        function calculateTotal() {
+            const start = document.getElementById('startDate').value;
+            const end = document.getElementById('endDate').value;
+
+            if (start && end) {
+                const date1 = new Date(start);
+                const date2 = new Date(end);
+                
+                const diffTime = Math.abs(date2 - date1);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+                if (diffDays > 0) {
+                    const total = diffDays * currentEquipmentPrice;
+                    document.getElementById('modalTotalPrice').innerText = total + ' ₽ (' + diffDays + ' сут.)';
+                } else {
+                    document.getElementById('modalTotalPrice').innerText = 'Неверные даты';
+                }
+            }
+        }
+
+        // 4. Отправка формы (Сохранение брони и списание со склада)
+        function submitBooking() {
+            const start = document.getElementById('startDate').value;
+            const end = document.getElementById('endDate').value;
+            const total = document.getElementById('modalTotalPrice').innerText;
+
+            if (!start || !end || total === '0 ₽' || total === 'Неверные даты') {
+                alert('Пожалуйста, выберите корректные даты.');
+                return;
+            }
+
+            const userName = sessionStorage.getItem('userName') || 'Клиент';
+
+            // Создаем объект брони
+            const booking = {
+                equipment: currentEquipmentName,
+                startDate: start,
+                endDate: end,
+                totalPrice: total,
+                clientName: userName,
+                status: 'pending' // По умолчанию "Ожидает"
+            };
+
+            // Сохраняем бронь
+            let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            bookings.push(booking);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+
+            // СПИСЫВАЕМ ЕДИНИЦУ СО СКЛАДА
+            let units = JSON.parse(localStorage.getItem('warehouse_units')) || [];
+            let freeUnit = units.find(u => u.name === currentEquipmentName && u.status === 'Доступно');
+            if (freeUnit) {
+                freeUnit.status = 'Выдано'; // Помечаем, что занято
+                localStorage.setItem('warehouse_units', JSON.stringify(units));
+            }
+
+            alert('Успешно! Вы забронировали: ' + currentEquipmentName);
+            closeModal();
+        }
+    </script>
 </body>
 </html>

@@ -1,7 +1,5 @@
-/* Подключаем современный шрифт */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
 
-/* Базовые настройки */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -9,105 +7,122 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: #f3f4f6; /* Мягкий серый фон */
-    color: #1f2937;
-    line-height: 1.5;
-    padding-bottom: 40px;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #3b3a39; 
+    color: #f4ede4;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding-bottom: 60px;
 }
 
-/* Шапка сайта */
+/* --- шапка--- */
 header {
-    background-color: #ffffff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    padding: 16px 20px;
+    background-color: #2a2928; 
+    padding: 20px 50px;
     position: sticky;
     top: 0;
     z-index: 100;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid #4a4948;
 }
 
 .logo {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #2563eb; /* Синий акцент */
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: #f4ede4;
+    text-transform: uppercase;
+    letter-spacing: 2px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     text-decoration: none;
 }
 
 .btn-login {
-    background-color: #2563eb;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
+    background-color: #e08b71; /* Персиковый акцент */
+    color: #2a2928;
+    padding: 8px 20px;
+    border-radius: 4px;
     text-decoration: none;
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: background-color 0.2s;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    transition: all 0.2s;
 }
 
 .btn-login:hover {
-    background-color: #1d4ed8;
+    background-color: #f09c82;
 }
 
-/* Основной контент */
+/* --- сетка каталога --- */
 main {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 30px 20px;
+    padding: 40px 20px;
 }
 
 h2 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    color: #111827;
+    font-size: 1.8rem;
+    font-weight: 300;
+    margin-bottom: 30px;
+    color: #f4ede4;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 1px solid #5a5958;
+    padding-bottom: 15px;
 }
 
-/* Сетка каталога (адаптивная) */
 .catalog {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px;
+    gap: 25px;
 }
 
-/* Карточка товара */
+/* --- карточка--- */
 .card {
-    background: #ffffff;
-    border-radius: 12px;
+    border-radius: 8px; 
     overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    transition: transform 0.2s, box-shadow 0.2s;
     display: flex;
     flex-direction: column;
+    box-shadow: none;
+    transition: transform 0.2s ease;
 }
 
 .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transform: translateY(-4px); 
 }
 
-/* Заглушка вместо фото (чтобы карточки были одинаковыми) */
+/* Разные цвета карточек */
+.card:nth-child(1) { background: #6abebb; color: #1a3b3a; } /* Бирюзовый */
+.card:nth-child(2) { background: #e08b71; color: #3b1e14; } /* Персиковый */
+.card:nth-child(3) { background: #f4ede4; color: #3b3a39; } /* Кремовый */
+.card:nth-child(4) { background: #4a4542; color: #f4ede4; } /* Темно-серый */
+
+/* --- картинки-- */
 .card-image {
-    height: 160px;
-    background-color: #e5e7eb;
+    height: 200px; 
+    width: 100%;
+    background-color: #fce1bf; 
     display: flex;
-    align-items: center;
     justify-content: center;
-    color: #9ca3af;
-    font-size: 0.875rem;
+    align-items: center;
     overflow: hidden;
 }
 
 .card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 90%; 
+    height: 90%;
+    object-fit: contain; 
+    transition: transform 0.4s ease;
 }
 
+.card:hover .card-image img {
+    transform: scale(1.08);
+}
+
+/* --- текст в карточке --- */
 .card-body {
     padding: 20px;
     display: flex;
@@ -116,54 +131,65 @@ h2 {
 }
 
 .card h3 {
-    font-size: 1.125rem;
+    font-size: 1.2rem;
     font-weight: 600;
-    margin-bottom: 8px;
-    color: #111827;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .badge {
     display: inline-block;
     padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    margin-bottom: 12px;
-    background-color: #dcfce7;
-    color: #166534;
+    border-radius: 2px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    background-color: rgba(0,0,0,0.1);
+    color: inherit;
+    text-transform: uppercase;
     width: fit-content;
+    letter-spacing: 1px;
+}
+
+/* для темной карточки - делаем бейдж светлее */
+.card:nth-child(4) .badge {
+    background-color: rgba(255,255,255,0.1);
 }
 
 .card p.category-text {
-    font-size: 0.875rem;
-    color: #6b7280;
-    margin-bottom: 16px;
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .price {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #2563eb;
-    margin-top: auto; /* Прижимает цену и кнопку к низу */
-    margin-bottom: 16px;
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin-top: auto;
+    margin-bottom: 15px;
 }
 
 .price span {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     font-weight: 400;
-    color: #6b7280;
+    opacity: 0.8;
 }
 
-/* Кнопка бронирования */
+/* --- кнопка бронирования --- */
 .btn-book {
-    background-color: #f3f4f6;
-    color: #374151;
-    border: 1px solid #d1d5db;
-    padding: 10px;
-    border-radius: 6px;
+    background-color: rgba(0,0,0,0.1);
+    color: inherit;
+    border: 1px solid rgba(0,0,0,0.2);
+    padding: 12px;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     width: 100%;
     transition: all 0.2s;
     display: flex;
@@ -172,41 +198,117 @@ h2 {
     gap: 8px;
 }
 
-.btn-book:hover {
-    background-color: #2563eb;
-    color: white;
-    border-color: #2563eb;
+.card:nth-child(4) .btn-book {
+    border: 1px solid rgba(255,255,255,0.2);
+    background-color: rgba(255,255,255,0.05);
 }
 
-/* Стили для страницы входа/регистрации */
+.btn-book:hover {
+    background-color: rgba(0,0,0,0.2);
+}
 
-/* Центрируем форму на экране */
+.card:nth-child(4) .btn-book:hover {
+    background-color: rgba(255,255,255,0.15);
+}
+
+/* --- таблицы --- */
+.account-section {
+    background: #f4ede4;
+    border-radius: 8px;
+    padding: 30px;
+    margin-top: 30px;
+    color: #3b3a39;
+    box-shadow: none;
+}
+
+.account-section h3 {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding-bottom: 10px;
+}
+
+.table-responsive { overflow-x: auto; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th {
+    padding: 15px;
+    background-color: rgba(0,0,0,0.05);
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+}
+
+td {
+    padding: 15px;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.status {
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-block;
+    text-transform: uppercase;
+}
+
+.status-active { background: #6abebb; color: #1a3b3a; }
+.status-pending { background: #e6b95a; color: #4a3500; }
+.status-overdue { background: #e08b71; color: #3b1e14; }
+
+.btn-details {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.btn-details:hover { text-decoration: underline; }
+
+/* --- вход/регистрация --- */
 .auth-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 80px); 
+    min-height: calc(100vh - 100px);
     padding: 20px;
 }
 
-/* Сама белая карточка формы */
 .login-container {
-    background: #ffffff;
+    background: #f4ede4;
     padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
     width: 100%;
-    max-width: 420px;
+    max-width: 400px;
+    color: #3b3a39;
+    box-shadow: none;
 }
 
 .login-container h2 {
     text-align: center;
-    margin-bottom: 24px;
-    color: #111827;
-    font-size: 1.5rem;
+    margin-bottom: 30px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
-/* Группы полей ввода */
 .form-group {
     margin-bottom: 20px;
 }
@@ -214,143 +316,79 @@ h2 {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    font-weight: 500;
-    color: #374151;
-    font-size: 0.95rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .form-group input {
     width: 100%;
     padding: 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 4px;
     font-size: 1rem;
-    font-family: inherit;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.5);
+    color: #3b3a39;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    border-color: #3b3a39;
+    background: #fff;
 }
 
-/* Кнопка отправки формы */
 .btn-submit {
     width: 100%;
-    padding: 12px;
-    background-color: #2563eb;
-    color: white;
+    padding: 14px;
+    background: #3b3a39;
+    color: #f4ede4;
     border: none;
-    border-radius: 8px;
-    font-size: 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
     cursor: pointer;
-    transition: background-color 0.2s;
-    margin-top: 8px;
+    transition: background 0.2s;
+    margin-top: 10px;
 }
 
 .btn-submit:hover {
-    background-color: #1d4ed8;
+    background: #2a2928;
 }
 
-/* Ссылки под формой */
 .auth-link {
     text-align: center;
     margin-top: 20px;
-    font-size: 0.9rem;
-    color: #6b7280;
+    font-size: 0.85rem;
 }
 
 .auth-link a {
-    color: #2563eb;
+    color: inherit;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid currentColor;
 }
 
-.auth-link a:hover {
-    text-decoration: underline;
-}
-
-.auth-link.back-link {
-    margin-top: 12px;
-    display: block;
-}
-
-
-/* Стили для Личного кабинета (account.html) */
-
-.account-section {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    margin-top: 30px;
-}
-
-.account-section h3 {
-    margin-bottom: 20px;
-    color: #111827;
-    font-size: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Обертка для прокрутки таблицы на телефонах */
-.table-responsive {
-    overflow-x: auto;
-}
-
-/* Стили таблицы */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-}
-
-th, td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-th {
-    background-color: #f9fafb;
-    font-weight: 600;
-    color: #374151;
-    font-size: 0.9rem;
-    white-space: nowrap;
-}
-
-td {
-    font-size: 0.95rem;
-    color: #4b5563;
-}
-
-/* Плашки статусов */
-.status {
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    display: inline-block;
-    white-space: nowrap;
-}
-
-.status-active { background: #dcfce7; color: #166534; } 
-.status-pending { background: #fef3c7; color: #92400e; } 
-.status-overdue { background: #fee2e2; color: #991b1b; } 
-
-/* Кнопка "Детали" в таблице */
-.btn-details {
-    background: none;
+/* --- кнопки действия в менеджере --- */
+.btn-action {
+    padding: 8px 12px;
+    border-radius: 2px;
     border: none;
-    color: #2563eb;
+    font-size: 0.75rem;
+    font-weight: 700;
     cursor: pointer;
-    font-weight: 500;
-    padding: 0;
+    transition: opacity 0.2s;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.btn-details:hover {
-    text-decoration: underline;
-}
+.btn-confirm { background: #6abebb; color: #1a3b3a; }
+.btn-issue { background: #e6b95a; color: #4a3500; }
+.btn-return { background: #e08b71; color: #3b1e14; }
+.btn-disabled { background: #cccccc; color: #888888; cursor: not-allowed; }
