@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель менеджера - Прокат</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-box-open"></i> Прокат
+        </a>
+        <div>
+            <span style="margin-right: 15px; font-weight: 500; color: #4b5563;">
+                <i class="fa-solid fa-user-tie"></i> Менеджер
+            </span>
+            <a href="index.html" onclick="logout()" class="btn-login">Выйти</a>
+            <div style="margin-bottom: 20px;">
+                <a href="supplies.html" class="btn-submit" style="text-decoration: none; display: inline-block; padding: 10px 20px; width: auto; background-color: #059669;">
+                    <i class="fa-solid fa-truck-ramp-box"></i> Оформить поставку
+    </a>
+</div>
+        </div>
+    </header>
+
+    <main style="max-width: 1100px; margin: 0 auto; padding: 0 20px;">
+        <h2 style="margin-top: 30px;">Рабочее место менеджера</h2>
+        <p style="color: #6b7280; margin-bottom: 20px;">Управление бронированиями и выдачей оборудования</p>
+
+        <div class="account-section">
+            <h3><i class="fa-solid fa-clipboard-list"></i> Активные бронирования</h3>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Клиент</th>
+                            <th>Оборудование</th>
+                            <th>Даты</th>
+                            <th>Статус</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody id="managerTable">  
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Простая функция для имитации работы
+            function changeStatus(bookingIndex, action) {
+        let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+        let b = bookings[bookingIndex];
+        let units = JSON.parse(localStorage.getItem('warehouse_units')) || [];
+
+        // Логика
+        if (action === 'confirm') {
+            b.status = 'confirmed';
+        } else if (action === 'issue') {
+            b.status = 'issued';
+            // Ищем свободную единицу такого же оборудования
+            let freeUnit = units.find(u => u.name === b.equipment && u.status === 'Доступно');
+            if (freeUnit) {
+                freeUnit.status = 'Выдано';
+                localStorage.setItem('warehouse_units', JSON.stringify(units));
+            }
+        } else if (action === 'return') {
+            b.status = 'returned';
+            // Ищем выданную единицу и возвращаем её на склад
+            let rentedUnit = units.find(u => u.name === b.equipment && u.status === 'Выдано');
+            if (rentedUnit) {
+                rentedUnit.status = 'Доступно';
+                // Если клиент повредил, можно менять состояние, но пока просто вернем
+                localStorage.setItem('warehouse_units', JSON.stringify(units));
+            }
+        }
+
+        // Сохраняем брони
+        localStorage.setItem('bookings', JSON.stringify(bookings));
+        loadBookings(); // Перерисовываем таблицу
+    }
+       
+    function loadBookings() {
+        const table = document.getElementById('managerTable');
+        const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+
+        // Если броней нет, показываем сообщение
+        if (bookings.length === 0) {
+            table.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 20px; color:#6b7280;">Нет активных бронирований</td></tr>';
+            return;
+        }
+
+        // Очищаем таблицу
+        table.innerHTML = '';
+
+        // Проходим по всем броням
+        bookings.forEach((b, index) => {
+            // Форматируем даты (из 2026-11-20 в 20.11.2026)
+            const start = b.startDate.split('-').reverse().join('.');
+            const end = b.endDate.split('-').reverse().join('.');
+            
+            // Определяем статус и кнопку в зависимости от текущего статуса
+            let statusText = 'Ожидает';
+            let statusClass = 'status-pending';
+            let btnClass = 'btn-confirm';
+            let btnText = 'Подтвердить';
+            let nextAction = 'confirm'; // Что делать при нажатии
+
+            if (b.status === 'confirmed') {
+                statusText = 'Подтверждено';
+                statusClass = 'status-active';
+                btnClass = 'btn-issue';
+                btnText = 'Выдать';
+                nextAction = 'issue';
+            } else if (b.status === 'issued') {
+                statusText = 'Выдано';
+                statusClass = 'status-overdue'; // Для наглядности
+                btnClass = 'btn-return';
+                btnText = 'Вернуть';
+                nextAction = 'return';
+            } else if (b.status === 'returned') {
+                statusText = 'Возвращено';
+                statusClass = 'status-active';
+                btnClass = 'btn-disabled';
+                btnText = 'Завершено';
+                nextAction = 'none';
+            }
+
+            // Если это новая бронь, у которой еще нет статуса, ставим 'pending'
+            if (!b.status) b.status = 'pending';
+
+            // Создаем строку таблицы
+            const row = `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${b.clientName || 'Клиент'}</td>
+                    <td>${b.equipment}</td>
+                    <td>${start} - ${end}</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="btn-action ${btnClass}" 
+                                onclick="changeStatus(${index}, '${nextAction}')"
+                                ${nextAction === 'none' ? 'disabled' : ''}>
+                            ${btnText}
+                        </button>
+                    </td>
+                </tr>
+            `;
+            table.innerHTML += row;
+        });
+    }
+
+    // Функция изменения статуса
+    function changeStatus(bookingIndex, action) {
+        let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+        let b = bookings[bookingIndex];
+
+        if (action === 'confirm') {
+            b.status = 'confirmed';
+        } else if (action === 'issue') {
+            b.status = 'issued';
+        } else if (action === 'return') {
+            b.status = 'returned';
+        }
+
+        // Сохраняем обновленный массив обратно в память
+        localStorage.setItem('bookings', JSON.stringify(bookings));
+        
+        // Перерисовываем таблицу
+        loadBookings();
+    }
+
+    // Запускаем загрузку при открытии страницы
+    loadBookings();
+
+    </script>
+</body>
+</html>

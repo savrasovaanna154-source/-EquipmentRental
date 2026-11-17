@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Склад - Прокат</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-box-open"></i> Прокат
+        </a>
+        <div>
+            <span style="margin-right: 15px; font-weight: 600; color: #4f46e5;">
+                <i class="fa-solid fa-user-shield"></i> Администратор
+            </span>
+            <a href="admin.html" class="btn-login" style="background-color: #4b5563; margin-right: 10px;">Назад в админку</a>
+            <a href="index.html" class="btn-login">Выйти</a>
+        </div>
+    </header>
+
+    <main style="max-width: 1100px; margin: 0 auto; padding: 0 20px;">
+        <h2 style="margin-top: 30px;">Учёт склада</h2>
+        <p style="color: #6b7280; margin-bottom: 20px;">Управление физическими единицами оборудования и их состоянием</p>
+
+        <div class="account-section">
+            <h3><i class="fa-solid fa-boxes-stacked"></i> Инвентарные единицы</h3>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Инв. №</th>
+                            <th>Название</th>
+                            <th>Состояние</th>
+                            <th>Статус</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody id="warehouse-body">
+                        <!-- Данные появятся здесь -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 1. Инициализация склада (если памяти нет, создаем базовые единицы)
+                // 1. Инициализация склада (создаем физические единицы для каждого товара)
+        let units = JSON.parse(localStorage.getItem('warehouse_units'));
+
+        if (!units) {
+            units = [
+                // 3 палатки
+                { id: 'PAL-001', name: 'Палатка 4-местная', condition: 'Отличное', status: 'Доступно' },
+                { id: 'PAL-002', name: 'Палатка 4-местная', condition: 'Хорошее', status: 'Доступно' },
+                { id: 'PAL-003', name: 'Палатка 4-местная', condition: 'Отличное', status: 'Доступно' },
+                
+                // 2 перфоратора
+                { id: 'PERF-001', name: 'Перфоратор Bosch', condition: 'Отличное', status: 'Доступно' },
+                { id: 'PERF-002', name: 'Перфоратор Bosch', condition: 'Отличное', status: 'Доступно' },
+                
+                // 1 велосипед
+                { id: 'VEL-001', name: 'Велосипед горный', condition: 'Отличное', status: 'Доступно' },
+                
+                // 1 лодка
+                { id: 'BOAT-001', name: 'Лодка надувная', condition: 'Отличное', status: 'Доступно' }
+            ];
+            localStorage.setItem('warehouse_units', JSON.stringify(units));
+        }
+
+        // 2. Функция отрисовки таблицы
+        function renderWarehouse() {
+            const tbody = document.getElementById('warehouse-body');
+            tbody.innerHTML = '';
+
+            units.forEach(unit => {
+                // Определяем цвета
+                let condClass = 'status-active'; // Зеленый
+                if (unit.condition === 'Требует ремонта') condClass = 'status-overdue'; // Красный
+                else if (unit.condition === 'Хорошее') condClass = 'status-pending'; // Желтый
+
+                let statusClass = 'status-active';
+                let btnHtml = '';
+
+                // Логика кнопок
+                if (unit.status === 'Доступно') {
+                    btnHtml = `<button class="btn-action btn-return" onclick="sendToRepair('${unit.id}')">В ремонт</button>`;
+                    statusClass = 'status-active';
+                } else if (unit.status === 'Ремонт') {
+                    btnHtml = `<button class="btn-action btn-issue" onclick="returnFromRepair('${unit.id}')">Вернуть в строй</button>`;
+                    statusClass = 'status-overdue';
+                } else if (unit.status === 'Выдано') {
+                    btnHtml = `<button class="btn-action btn-disabled" disabled>Занято клиентом</button>`;
+                    statusClass = 'status-pending';
+                }
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${unit.id}</td>
+                        <td>${unit.name}</td>
+                        <td><span class="status ${condClass}">${unit.condition}</span></td>
+                        <td><span class="status ${statusClass}">${unit.status}</span></td>
+                        <td>${btnHtml}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // 3. Действия
+        function sendToRepair(id) {
+            if (confirm('Отправить единицу ' + id + ' в ремонт?')) {
+                const unit = units.find(u => u.id === id);
+                unit.status = 'Ремонт';
+                unit.condition = 'Требует ремонта';
+                localStorage.setItem('warehouse_units', JSON.stringify(units));
+                renderWarehouse();
+            }
+        }
+
+        function returnFromRepair(id) {
+            if (confirm('Вернуть единицу ' + id + ' в строй после ремонта?')) {
+                const unit = units.find(u => u.id === id);
+                unit.status = 'Доступно';
+                unit.condition = 'Отличное';
+                localStorage.setItem('warehouse_units', JSON.stringify(units));
+                renderWarehouse();
+            }
+        }
+
+        // Запуск при открытии
+        renderWarehouse();
+    </script>
+</body>
+</html>

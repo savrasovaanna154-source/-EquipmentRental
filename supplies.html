@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поставки - Прокат</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-box-open"></i> Прокат
+        </a>
+        <div>
+            <span style="margin-right: 15px; font-weight: 600; color: #4b5563;">
+                <i class="fa-solid fa-user-tie"></i> Менеджер
+            </span>
+            <a href="manager.html" class="btn-login" style="background-color: #4b5563; margin-right: 10px;">Назад к броням</a>
+            <a href="index.html" class="btn-login">Выйти</a>
+        </div>
+    </header>
+
+    <main style="max-width: 800px; margin: 0 auto; padding: 40px 20px;">
+        <h2>Оформление поставки</h2>
+        <p style="color: #6b7280; margin-bottom: 20px;">Добавьте новые единицы оборудования на склад</p>
+
+        <div class="account-section">
+            <form id="supplyForm" onsubmit="addSupply(event)" style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="form-group">
+                    <label>Выберите оборудование</label>
+                    <select id="supplyName" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #d1d5db;">
+                        <option value="Палатка 4-местная">Палатка 4-местная</option>
+                        <option value="Перфоратор Bosch">Перфоратор Bosch</option>
+                        <option value="Велосипед горный">Велосипед горный</option>
+                        <option value="Лодка надувная">Лодка надувная</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Количество единиц</label>
+                    <input type="number" id="supplyQty" min="1" max="50" value="1" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #d1d5db;">
+                </div>
+
+                <button type="submit" class="btn-submit" style="margin-top: 10px;">Добавить на склад</button>
+            </form>
+        </div>
+        
+        <!-- Таблица того, что сейчас на складе -->
+        <div class="account-section">
+            <h3><i class="fa-solid fa-clipboard-list"></i> Текущие остатки на складе</h3>
+            <div class="table-responsive">
+                <table id="stockTable">
+                    <thead>
+                        <tr>
+                            <th>Оборудование</th>
+                            <th>Всего единиц</th>
+                            <th>Доступно</th>
+                            <th>Занято / Ремонт</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Данные подтянутся скриптом -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Функция добавления поставки
+        function addSupply(event) {
+            event.preventDefault();
+            const name = document.getElementById('supplyName').value;
+            const qty = parseInt(document.getElementById('supplyQty').value);
+
+            let units = JSON.parse(localStorage.getItem('warehouse_units')) || [];
+            
+            // Определяем префикс для инвентарного номера
+            let prefix = '';
+            if (name.includes('Палатка')) prefix = 'PAL';
+            else if (name.includes('Перфоратор')) prefix = 'PERF';
+            else if (name.includes('Велосипед')) prefix = 'VEL';
+            else if (name.includes('Лодка')) prefix = 'BOAT';
+
+            // Генерируем новые единицы
+            for (let i = 0; i < qty; i++) {
+                // Ищем максимальный номер для этого префикса
+                let maxNum = 0;
+                units.forEach(u => {
+                    if (u.id.startsWith(prefix)) {
+                        let num = parseInt(u.id.split('-')[1]);
+                        if (num > maxNum) maxNum = num;
+                    }
+                });
+
+                // Создаем новый ID (например, PAL-004)
+                let newId = prefix + '-' + String(maxNum + 1 + i).padStart(3, '0');
+
+                units.push({
+                    id: newId,
+                    name: name,
+                    condition: 'Отличное',
+                    status: 'Доступно'
+                });
+            }
+
+            localStorage.setItem('warehouse_units', JSON.stringify(units));
+            alert('Успешно добавлено ' + qty + ' ед. оборудования "' + name + '" на склад!');
+            
+            // Обновляем таблицу остатков
+            renderStock();
+        }
+
+        // Функция отрисовки текущих остатков
+        function renderStock() {
+            const units = JSON.parse(localStorage.getItem('warehouse_units')) || [];
+            const tbody = document.querySelector('#stockTable tbody');
+            tbody.innerHTML = '';
+
+            // Группируем данные по названию
+            const grouped = {};
+            units.forEach(u => {
+                if (!grouped[u.name]) grouped[u.name] = { total: 0, available: 0, busy: 0 };
+                grouped[u.name].total++;
+                if (u.status === 'Доступно') grouped[u.name].available++;
+                else grouped[u.name].busy++;
+            });
+
+            // Выводим на экран
+            for (const [name, data] of Object.entries(grouped)) {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><b>${name}</b></td>
+                        <td>${data.total} шт.</td>
+                        <td><span class="status status-active">${data.available} шт.</span></td>
+                        <td><span class="status status-overdue">${data.busy} шт.</span></td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Запуск при загрузке
+        renderStock();
+    </script>
+</body>
+</html>
